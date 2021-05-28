@@ -91,4 +91,46 @@ window.addEventListener('DOMContentLoaded', () => {
             }
     }
     setClock('.timer',deadLine );
+
+    //modal window 
+    //elsi hotim ukazati atribut zapisivaem v kvadratnie skobki 
+    const modalTrigger = document.querySelectorAll('[data-modal]'),
+          modal = document.querySelector('.modal'),
+          modalCloseBtn =document.querySelector('[data-close ]');
+//vivod modalinogo okna 
+
+//priviazivanie k neskolikim elementam 
+modalTrigger.forEach(btn => {
+     btn.addEventListener('click', () => {
+         modal.classList.add('show');
+         modal.classList.remove('hide');
+         //ne prokru4ivaet str
+         //   modal.classList.toggle('show');
+         document.body.style.overflow = 'hidden';
+
+     });
+
+});
+//sozdaem functii dlia upr coda 
+         function closeModal(){
+   modal.classList.add('hide');
+   modal.classList.remove('show');
+   //modal.classList.toggle('show');
+   document.body.style.overflow = '';
+         }
+
+           modalCloseBtn.addEventListener('click',closeModal )
+           //strelocinaia func 
+           //klikaem po drugomu block str i vihodim iz okna 
+           modal.addEventListener('click',(e)=>{
+             if (e.target === modal) {
+                   closeModal();
+             }
+           });
+           document.addEventListener('keydown',(e)=>{
+            if(e.code === "Escape" && modal.classList.contains('show')){
+                closeModal();
+            }
+           });
+
 });
