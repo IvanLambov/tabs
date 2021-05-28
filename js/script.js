@@ -61,10 +61,10 @@ window.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    function getzero(num){
-        if (num >=0 && num < 10) {
+    function getzero(num) {
+        if (num >= 0 && num < 10) {
             return `0${num}`;
-        }else {
+        } else {
             return num;
         }
     }
@@ -75,62 +75,75 @@ window.addEventListener('DOMContentLoaded', () => {
             hours = timer.querySelector('#hours'),
             minutes = timer.querySelector('#minutes'),
             seconds = timer.querySelector('#seconds'),
-            timeInterval=setInterval(updateClock,1000);
-             updateClock();
+            timeInterval = setInterval(updateClock, 1000);
+        updateClock();
 
-            function updateClock(){
-                const t = getTimeRemaining(endtime);
-                days.innerHTML = getzero(t.days);
-                 hours.innerHTML = getzero(t.hours);
-                  minutes.innerHTML =getzero(t.minutes);
-                   seconds.innerHTML = getzero(t.seconds);
+        function updateClock() {
+            const t = getTimeRemaining(endtime);
+            days.innerHTML = getzero(t.days);
+            hours.innerHTML = getzero(t.hours);
+            minutes.innerHTML = getzero(t.minutes);
+            seconds.innerHTML = getzero(t.seconds);
 
-                   if (t.total <=0 ) {
-                       clearInterval(timeInterval);
-                   }
+            if (t.total <= 0) {
+                clearInterval(timeInterval);
             }
+        }
     }
-    setClock('.timer',deadLine );
+    setClock('.timer', deadLine);
 
     //modal window 
     //elsi hotim ukazati atribut zapisivaem v kvadratnie skobki 
     const modalTrigger = document.querySelectorAll('[data-modal]'),
-          modal = document.querySelector('.modal'),
-          modalCloseBtn =document.querySelector('[data-close ]');
-//vivod modalinogo okna 
+        modal = document.querySelector('.modal'),
+        modalCloseBtn = document.querySelector('[data-close ]');
 
-//priviazivanie k neskolikim elementam 
-modalTrigger.forEach(btn => {
-     btn.addEventListener('click', () => {
-         modal.classList.add('show');
-         modal.classList.remove('hide');
-         //ne prokru4ivaet str
-         //   modal.classList.toggle('show');
-         document.body.style.overflow = 'hidden';
+    function openModal() {
+        modal.classList.add('show');
+        modal.classList.remove('hide');
+        //ne prokru4ivaet str
+        //   modal.classList.toggle('show');
+        document.body.style.overflow = 'hidden';
+        clearInterval(modalTimerId);
+      
+    }
+    //vivod modalinogo okna 
 
-     });
+    //priviazivanie k neskolikim elementam 
+    modalTrigger.forEach(btn => {
+        btn.addEventListener('click', openModal);
 
-});
-//sozdaem functii dlia upr coda 
-         function closeModal(){
-   modal.classList.add('hide');
-   modal.classList.remove('show');
-   //modal.classList.toggle('show');
-   document.body.style.overflow = '';
-         }
+    });
 
-           modalCloseBtn.addEventListener('click',closeModal )
-           //strelocinaia func 
-           //klikaem po drugomu block str i vihodim iz okna 
-           modal.addEventListener('click',(e)=>{
-             if (e.target === modal) {
-                   closeModal();
-             }
-           });
-           document.addEventListener('keydown',(e)=>{
-            if(e.code === "Escape" && modal.classList.contains('show')){
-                closeModal();
-            }
-           });
+    //sozdaem functii dlia upr coda 
+    function closeModal() {
+        modal.classList.add('hide');
+        modal.classList.remove('show');
+        //modal.classList.toggle('show');
+        document.body.style.overflow = '';
+    }
 
+    modalCloseBtn.addEventListener('click', closeModal)
+    //strelocinaia func 
+    //klikaem po drugomu block str i vihodim iz okna 
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.code === "Escape" && modal.classList.contains('show')) {
+            closeModal();
+        }
+    });
+    function showModalByScroll(){
+if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+    openModal();
+    window.removeEventListener('scroll', showModalByScroll);
+}
+    }
+
+    const modalTimerId = setTimeout(openModal,5000);
+    //pri prokrutke vsei stranitsi otkrivaetsea modalinoe okno 
+    window.addEventListener('scroll', showModalByScroll);
 });
